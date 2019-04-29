@@ -310,7 +310,7 @@ Also need to change `wasm_exec.js` to use BrowserFS in browser context:
 ```
 
 
-If we run it, we can see the console.log in `fs.readFile` sucessfully report the content bytes of the test file, but we get another cryptic exception:
+If we run it, we can see the `console.log` call in `fs.readFile` sucessfully report the content bytes of the test file, but we get another cryptic exception:
 ```
 Uncaught (in promise) TypeError: Reflect.get called on non-object
     at Object.get (<anonymous>)
@@ -611,7 +611,7 @@ validation ok
 
 Awesome, so our BrowserFS + patching approach works!
 
-Next, let's try something that would write out some data, in `index.html`:
+Next, let's try something that would write out some data - extracting the first page of PDF to `first_page.pdf` (see `go.argv` below), in `index.html`:
 
 ```javascript
     function done() {
@@ -630,7 +630,7 @@ Next, let's try something that would write out some data, in `index.html`:
 
 ```
 
-Another Error:
+It gives another error:
 ```
 callback for writeOriginal get called with args:
 
@@ -647,7 +647,7 @@ TypeError: buffer$$1.copy is not a function
     at syscall_js.Value.Call (wasm-function[1636]:482)
 ```
 
-We find that the `buf` passed to `fs.write` has no copy method. So we change that to:
+We find that the `buf` passed to `fs.write` has no `copy` method. So we change that to:
 
 ```javascript
         global.fs.write = function(fd, buf, offset, length, position, callback) {
